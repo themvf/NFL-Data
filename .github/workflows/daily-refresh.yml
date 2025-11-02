@@ -1,0 +1,39 @@
+﻿name: Daily NFL Data Refresh
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 10 * * *"  # 10:00 UTC daily
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Refresh SQLite data
+        run: python scripts/season_to_sqlite.py --season 2025 --advstats-summary week
+
+      - name: Commit updated data
+        run: |
+          if git status --porcelain; then
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git add data/nflverse.sqlite
+            git commit -m "chore: refresh NFL data"
+            git push
+          else
+            echo "No changes to commit."
