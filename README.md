@@ -34,3 +34,12 @@ The GitHub Actions workflow runs daily (and on manual dispatch) to:
 3. Commit and push changes to data/nflverse.sqlite when new data is available.
 
 Adjust the cron expression or flags in .github/workflows/daily-refresh.yml to change the schedule or seasons being updated.
+
+### Manual refresh with Streamlit
+
+`ash
+pip install -r requirements.txt  # ensures Streamlit is available
+streamlit run streamlit_app.py
+`
+
+From the web UI you can choose one or more seasons, adjust aggregation levels, and trigger the SQLite export script without waiting for the scheduled workflow.

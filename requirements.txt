@@ -1,3 +1,4 @@
 ﻿nflreadpy>=0.1.4
 polars>=1.30.0
 pandas>=2.2.0
+streamlit>=1.32.0
